@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I Survived — The Book Series</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --deep: #0A1628;
+    --red: #D93025;
+    --paper: #F2E8D5;
+    --smoke: #EAE6E0;
+    --gold: #F5A623;
+    --mid: #1C2F4E;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { background: var(--deep); color: var(--smoke); font-family: 'Nunito', sans-serif; overflow-x: hidden; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    position: relative; overflow: hidden; text-align: center; padding: 2rem;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 60%, #1C2F4E 0%, #0A1628 70%);
+    z-index: 0;
+  }
+  .particle { position: absolute; border-radius: 2px; opacity: 0; animation: drift linear infinite; z-index: 1; }
+  @keyframes drift {
+    0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.6; } 90% { opacity: 0.4; }
+    100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+  }
+  .hero-eyebrow {
+    position: relative; z-index: 2;
+    font-weight: 900; font-size: clamp(0.75rem,2vw,1rem); letter-spacing: 0.35em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 1rem;
+    animation: fadeDown 0.8s ease 0.3s both;
+  }
+  .hero-title {
+    position: relative; z-index: 2;
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: clamp(4.5rem,18vw,14rem); line-height: 0.88;
+    color: var(--paper);
+    text-shadow: 0 0 40px rgba(217,48,37,0.6), 6px 6px 0 var(--red), 12px 12px 0 rgba(217,48,37,0.3);
+    animation: shudder 0.6s ease 0.1s both, fadeIn 0.4s ease both;
+    user-select: none;
+  }
+  @keyframes shudder {
+    0%  { transform: translate(-4px, 2px) skewX(-3deg); }
+    20% { transform: translate( 4px,-3px) skewX( 2deg); }
+    40% { transform: translate(-2px, 4px) skewX(-1deg); }
+    60% { transform: translate( 3px,-2px) skewX( 1deg); }
+    80% { transform: translate(-1px, 1px) skewX(-0.5deg); }
+    100%{ transform: translate(0,0) skewX(0); }
+  }
+  @keyframes fadeIn  { from { opacity:0; } to { opacity:1; } }
+  @keyframes fadeDown{ from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:none; } }
+  @keyframes fadeUp  { from { opacity:0; transform:translateY(24px); }  to { opacity:1; transform:none; } }
+
+  .hero-sub {
+    position: relative; z-index: 2;
+    font-size: clamp(1.1rem,3vw,1.6rem); font-weight: 700;
+    color: var(--smoke); margin-top: 1.5rem; max-width: 540px; line-height: 1.4;
+    animation: fadeUp 0.8s ease 0.7s both;
+  }
+  .danger-meter {
+    position: relative; z-index: 2; margin-top: 2.5rem;
+    display: flex; align-items: center; gap: 1rem;
+    animation: fadeUp 0.8s ease 1s both;
+  }
+  .meter-label { font-size: 0.75rem; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+  .meter-bar { width: 200px; height: 12px; background: rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); }
+  .meter-fill {
+    height: 100%; width: 0%; border-radius: 6px;
+    background: linear-gradient(90deg, var(--gold), var(--red));
+    animation: meterFill 2.5s ease 1.2s forwards, pulse 1.8s ease 3.7s infinite;
+    box-shadow: 0 0 12px var(--red);
+  }
+  @keyframes meterFill { to { width: 92%; } }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 8px var(--red);} 50%{box-shadow:0 0 22px var(--red),0 0 40px rgba(217,48,37,0.4);} }
+  .scroll-hint {
+    position: absolute; bottom: 2rem; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    color: rgba(234,230,224,0.4); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+    animation: fadeUp 1s ease 2s both;
+  }
+  .scroll-arrow {
+    width: 20px; height: 20px;
+    border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+    transform: rotate(45deg); animation: bounce 1.4s ease infinite;
+  }
+  @keyframes bounce { 0%,100%{transform:rotate(45deg) translateY(0);} 50%{transform:rotate(45deg) translateY(5px);} }
+
+  /* BAND */
+  .band { background: var(--red); padding: 1rem 2rem; overflow: hidden; white-space: nowrap; }
+  .band-inner { display: inline-flex; gap: 3rem; animation: marquee 28s linear infinite; }
+  .band-item { font-family: 'Black Han Sans', sans-serif; font-size: 1.1rem; color: white; letter-spacing: 0.05em; }
+  .band-item span { color: var(--gold); }
+  @keyframes marquee { from{transform:translateX(0);} to{transform:translateX(-50%);} }
+
+  /* SHARED */
+  section { padding: 5rem 1.5rem; }
+  .section-label { font-size: 0.7rem; font-weight: 900; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+  .section-title { font-family: 'Black Han Sans', sans-serif; font-size: clamp(2.5rem,8vw,5rem); line-height: 0.95; color: var(--paper); margin-bottom: 1.5rem; }
+
+  /* ABOUT */
+  .about { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  @media(max-width:680px){ .about{grid-template-columns:1fr; gap:2rem;} }
+  .about-text p { font-size: 1.1rem; line-height: 1.8; color: rgba(234,230,224,0.8); margin-bottom: 1rem; }
+  .about-text p strong { color: var(--paper); }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  .stat-card { background: var(--mid); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 1.25rem; text-align: center; transition: transform 0.2s, border-color 0.2s; }
+  .stat-card:hover { transform: translateY(-4px); border-color: var(--gold); }
+  .stat-num { font-family: 'Black Han Sans', sans-serif; font-size: 2.8rem; color: var(--red); line-height: 1; }
+  .stat-desc { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; color: rgba(234,230,224,0.6); margin-top: 0.4rem; text-transform: uppercase; }
+
+  /* BOOKS */
+  .books-section { background: #0D1B30; }
+  .books-header { text-align: center; margin-bottom: 3rem; }
+  .books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1.25rem; max-width: 1200px; margin: 0 auto; }
+  .book-card {
+    position: relative; border-radius: 10px; overflow: hidden;
+    cursor: pointer; opacity: 0; transform: translateY(30px);
+    transition: transform 0.3s cubic-bezier(.22,.68,0,1.4), box-shadow 0.3s, opacity 0.4s;
+  }
+  .book-card.visible { opacity: 1; transform: translateY(0); }
+  .book-card:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 30px rgba(217,48,37,0.3); z-index: 2; }
+  .book-cover { width: 100%; aspect-ratio: 2/3; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 1rem; position: relative; overflow: hidden; }
+  .book-cover::before { content:''; position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,0.85) 30%,transparent 70%); z-index:1; }
+  .book-emoji { position:absolute; top:50%; left:50%; transform:translate(-50%,-55%); font-size:3.2rem; filter:drop-shadow(0 4px 12px rgba(0,0,0,0.5)); z-index:0; transition:transform 0.3s; }
+  .book-card:hover .book-emoji { transform:translate(-50%,-60%) scale(1.15); }
+  .book-info { position:relative; z-index:2; text-align:center; }
+  .book-num { font-size:0.6rem; font-weight:900; letter-spacing:0.2em; color:var(--gold); text-transform:uppercase; }
+  .book-title { font-family:'Black Han Sans',sans-serif; font-size:0.9rem; color:white; line-height:1.2; margin-top:0.25rem; }
+  .book-card::after { content:''; position:absolute; inset:0; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='300'%3E%3Cpath d='M100 0 L95 80 L110 100 L88 180 L105 200 L95 300' stroke='rgba(255,255,255,0.12)' stroke-width='1.5' fill='none'/%3E%3C/svg%3E") center/cover; opacity:0; transition:opacity 0.3s; pointer-events:none; z-index:3; }
+  .book-card:hover::after { opacity:1; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(6,14,27,0.88);
+    backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 1.5rem;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--mid);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    max-width: 520px; width: 100%;
+    padding: 2rem;
+    position: relative;
+    transform: translateY(24px) scale(0.97);
+    transition: transform 0.25s cubic-bezier(.22,.68,0,1.4);
+    max-height: 90vh; overflow-y: auto;
+  }
+  .modal-overlay.open .modal { transform: none; }
+  .modal-close {
+    position: absolute; top: 1rem; right: 1rem;
+    background: rgba(255,255,255,0.08); border: none; color: var(--smoke);
+    width: 36px; height: 36px; border-radius: 50%; font-size: 1.2rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .modal-close:hover { background: var(--red); }
+  .modal-emoji { font-size: 3.5rem; margin-bottom: 0.75rem; display: block; }
+  .modal-num { font-size: 0.7rem; font-weight: 900; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
+  .modal-title { font-family: 'Black Han Sans', sans-serif; font-size: 1.8rem; color: var(--paper); line-height: 1.1; margin-bottom: 1rem; }
+  .modal-divider { height: 3px; width: 48px; background: var(--red); border-radius: 2px; margin-bottom: 1.25rem; }
+  .modal-summary { font-size: 1rem; line-height: 1.75; color: rgba(234,230,224,0.82); margin-bottom: 1.25rem; }
+  .modal-fact { background: rgba(0,0,0,0.25); border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; padding: 0.85rem 1rem; font-size: 0.88rem; color: rgba(234,230,224,0.7); line-height: 1.6; }
+  .modal-fact strong { color: var(--gold); display: block; margin-bottom: 0.2rem; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; }
+
+  /* TIPS */
+  .tips-section { max-width: 900px; margin: 0 auto; }
+  .tips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+  .tip-card { background: var(--mid); border-left: 4px solid var(--red); border-radius: 0 12px 12px 0; padding: 1.5rem; opacity: 0; transform: translateX(-20px); transition: opacity 0.5s, transform 0.5s, background 0.2s; }
+  .tip-card.visible { opacity: 1; transform: none; }
+  .tip-card:hover { background: #243350; }
+  .tip-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+  .tip-title { font-family: 'Black Han Sans', sans-serif; font-size: 1.2rem; color: var(--paper); margin-bottom: 0.5rem; }
+  .tip-body { font-size: 0.9rem; line-height: 1.6; color: rgba(234,230,224,0.7); }
+
+  /* AUTHOR */
+  .author-section { background: var(--mid); text-align: center; }
+  .author-inner { max-width: 600px; margin: 0 auto; }
+  .author-avatar { width:100px; height:100px; border-radius:50%; background:linear-gradient(135deg,var(--red),var(--gold)); display:flex; align-items:center; justify-content:center; font-size:3rem; margin:0 auto 1.5rem; box-shadow:0 0 0 4px var(--deep),0 0 0 6px var(--gold); }
+  .author-quote { font-size:1.15rem; line-height:1.8; color:rgba(234,230,224,0.85); font-style:italic; margin:1rem 0 1.5rem; }
+  .author-name { font-family:'Black Han Sans',sans-serif; font-size:1.5rem; color:var(--paper); }
+  .author-role { font-size:0.8rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); margin-top:0.25rem; }
+
+  /* CTA */
+  .cta-section { text-align:center; padding:6rem 1.5rem; background:radial-gradient(ellipse at 50% 50%,#1C2F4E 0%,#0A1628 80%); position:relative; overflow:hidden; }
+  .cta-section::before { content:'SURVIVE'; position:absolute; font-family:'Black Han Sans',sans-serif; font-size:22vw; color:rgba(255,255,255,0.03); top:50%; left:50%; transform:translate(-50%,-50%); white-space:nowrap; pointer-events:none; }
+  .cta-title { font-family:'Black Han Sans',sans-serif; font-size:clamp(2.5rem,7vw,5rem); color:var(--paper); line-height:1; margin-bottom:1rem; }
+  .cta-title em { color:var(--red); font-style:normal; }
+  .cta-sub { font-size:1.1rem; color:rgba(234,230,224,0.65); margin-bottom:2.5rem; }
+  .cta-btn { display:inline-block; background:var(--red); color:white; font-family:'Black Han Sans',sans-serif; font-size:1.3rem; letter-spacing:0.05em; padding:1rem 2.5rem; border-radius:8px; text-decoration:none; transition:transform 0.2s,box-shadow 0.2s; box-shadow:0 4px 20px rgba(217,48,37,0.4); position:relative; z-index:1; }
+  .cta-btn:hover { transform:translateY(-3px) scale(1.04); box-shadow:0 10px 40px rgba(217,48,37,0.6); }
+
+  footer { background:#060e1b; text-align:center; padding:2rem; font-size:0.8rem; color:rgba(234,230,224,0.3); letter-spacing:0.05em; }
+  footer a { color:var(--gold); text-decoration:none; }
+
+  @media(prefers-reduced-motion:reduce){ *,*::before,*::after{animation:none!important;transition:none!important;} }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-eyebrow">Lauren Tarshis · The Official Series</div>
+  <h1 class="hero-title">I<br>SURVIVED</h1>
+  <p class="hero-sub">Real disasters. Real history. One kid who makes it out alive.</p>
+  <div class="danger-meter">
+    <span class="meter-label">Danger</span>
+    <div class="meter-bar"><div class="meter-fill"></div></div>
+    <span class="meter-label" style="color:var(--red)">MAX</span>
+  </div>
+  <div class="scroll-hint"><span>Explore</span><div class="scroll-arrow"></div></div>
+</section>
+
+<div class="band">
+  <div class="band-inner" id="bandInner"></div>
+</div>
+
+<section>
+  <div class="about">
+    <div class="about-text">
+      <div class="section-label">About the Series</div>
+      <h2 class="section-title">History<br>That Hits Hard</h2>
+      <p>Written by <strong>Lauren Tarshis</strong>, the <em>I Survived</em> series puts kids right in the middle of the world's most terrifying moments in history.</p>
+      <p>Each book follows a young hero who faces impossible odds — sharks, volcanoes, earthquakes, wars — and somehow makes it out alive. History has never felt this close.</p>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num">25+</div><div class="stat-desc">Books in the series</div></div>
+      <div class="stat-card"><div class="stat-num">10M+</div><div class="stat-desc">Copies sold</div></div>
+      <div class="stat-card"><div class="stat-num">Ages<br><span style="font-size:1.8rem">7–12</span></div><div class="stat-desc">Perfect reading age</div></div>
+      <div class="stat-card"><div class="stat-num">#1</div><div class="stat-desc">NY Times Bestseller</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="books-section">
+  <div class="books-header">
+    <div class="section-label">The Collection</div>
+    <h2 class="section-title">Choose Your Disaster</h2>
+    <p style="color:rgba(234,230,224,0.6);max-width:480px;margin:0 auto;line-height:1.7">Click any book to learn more about that survival story.</p>
+  </div>
+  <div class="books-grid" id="booksGrid"></div>
+</section>
+
+<section>
+  <div class="tips-section">
+    <div class="section-label">Real Survival Science</div>
+    <h2 class="section-title">Could You Survive?</h2>
+    <p style="color:rgba(234,230,224,0.65);line-height:1.7;max-width:520px">Each book is packed with real facts. Here's what scientists say about survival:</p>
+    <div class="tips-grid">
+      <div class="tip-card"><div class="tip-icon">🧠</div><div class="tip-title">Stay Calm</div><div class="tip-body">Panic burns energy and clouds judgment. Survivors focus on one small action at a time — the brain works best when it's not in overdrive.</div></div>
+      <div class="tip-card"><div class="tip-icon">💧</div><div class="tip-title">Find Water First</div><div class="tip-body">A human can survive 3 weeks without food but only 3 days without water. Locating a safe water source is always the top priority.</div></div>
+      <div class="tip-card"><div class="tip-icon">🔥</div><div class="tip-title">Signal for Help</div><div class="tip-body">Smoke during the day, fire at night. Three of anything is the universal distress signal rescuers are trained to spot.</div></div>
+      <div class="tip-card"><div class="tip-icon">🌊</div><div class="tip-title">Swim Parallel</div><div class="tip-body">Caught in a riptide? Never fight it head-on. Swim parallel to shore to escape the current, then angle back in.</div></div>
+      <div class="tip-card"><div class="tip-icon">⚡</div><div class="tip-title">Lightning Crouch</div><div class="tip-body">If caught outside, crouch low on the balls of your feet, ears covered, feet together. Never lie flat — ground current can travel through you.</div></div>
+      <div class="tip-card"><div class="tip-icon">🏔️</div><div class="tip-title">Stay Put</div><div class="tip-body">Lost hikers who stay near their last known position are found faster. Wandering makes search and rescue much harder.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="author-section">
+  <div class="author-inner">
+    <div class="section-label" style="text-align:center">The Author</div>
+    <div class="author-avatar">✍️</div>
+    <h2 class="section-title" style="font-size:clamp(2rem,5vw,3.5rem)">Lauren Tarshis</h2>
+    <p class="author-quote">"I want kids to feel that history isn't some dusty thing from the past — it happened to real people, people just like them, who found strength they didn't know they had."</p>
+    <div class="author-name">Lauren Tarshis</div>
+    <div class="author-role">Author · Editor · Scholastic Storyworks</div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2 class="cta-title">Ready to<br><em>Survive?</em></h2>
+  <p class="cta-sub">Find the series at your school library, local bookstore, or online.</p>
+  <a href="https://www.scholastic.com/isurvived" target="_blank" rel="noopener" class="cta-btn">Find a Book →</a>
+</section>
+
+<footer>
+  <p>Fan site for the <em>I Survived</em> series by Lauren Tarshis · Published by <a href="https://scholastic.com" target="_blank">Scholastic</a></p>
+  <p style="margin-top:0.5rem">All book titles and content are © Lauren Tarshis / Scholastic Inc.</p>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    <span class="modal-emoji" id="mEmoji"></span>
+    <div class="modal-num" id="mNum"></div>
+    <div class="modal-title" id="mTitle"></div>
+    <div class="modal-divider"></div>
+    <p class="modal-summary" id="mSummary"></p>
+    <div class="modal-fact"><strong>⚡ Did You Know?</strong><span id="mFact"></span></div>
+  </div>
+</div>
+
+<script>
+const books = [
+  { num:'#1',  title:'The Shark Attacks of 1916',          emoji:'🦈', bg:'linear-gradient(160deg,#0a3d6b,#1a6bb5)',
+    summary:'It\'s the summer of 1916 and ten-year-old Chet Roscow is swimming in the cool waters of Matawan Creek, New Jersey — until a great white shark turns the peaceful town into a place of terror. Based on the real shark attacks that killed four people and sparked a nationwide panic.',
+    fact:'The 1916 attacks directly inspired Peter Benchley\'s novel Jaws, and led to the first-ever government-backed shark hunt in U.S. history.' },
+
+  { num:'#2',  title:'The Sinking of the Titanic',          emoji:'🚢', bg:'linear-gradient(160deg,#0d2137,#1a4a7a)',
+    summary:'George Calder can\'t believe his luck — he\'s aboard the grandest ship ever built. But when the Titanic strikes an iceberg and begins to sink into the icy Atlantic, George must fight to survive one of history\'s greatest disasters.',
+    fact:'The Titanic carried only enough lifeboats for about half its passengers, a legal but catastrophic decision that cost over 1,500 lives.' },
+
+  { num:'#3',  title:'Hurricane Katrina',                   emoji:'🌀', bg:'linear-gradient(160deg,#1a3a1a,#2d6b2d)',
+    summary:'Barry Tucker is trapped in New Orleans as a monster storm barrels toward the city. Even after the storm passes, the rising floodwaters force Barry to make impossible choices to save himself and the people he loves.',
+    fact:'Hurricane Katrina\'s storm surge topped 28 feet in some areas, and over 80% of New Orleans flooded when its levees failed in 2005.' },
+
+  { num:'#4',  title:'The Bombing of Pearl Harbor',         emoji:'💥', bg:'linear-gradient(160deg,#3d1a0a,#8b3a1a)',
+    summary:'Danny Crane is visiting his uncle on the peaceful island of Oahu when Japanese warplanes fill the sky on the morning of December 7, 1941. In the chaos and fire, Danny must find his uncle and survive the attack that pulled America into World War II.',
+    fact:'The Pearl Harbor attack lasted just under two hours but destroyed 19 naval vessels and killed 2,403 Americans, pushing the U.S. into WWII the next day.' },
+
+  { num:'#5',  title:'The San Francisco Earthquake, 1906',  emoji:'🏚️', bg:'linear-gradient(160deg,#3d2800,#7a5200)',
+    summary:'Fletch has never thought much about earthquakes — until the ground begins to shake at 5 a.m. and the city of San Francisco crumbles around him. With fires raging and buildings collapsing, Fletch races through the chaos to find his father.',
+    fact:'The 1906 earthquake and its resulting fires destroyed over 28,000 buildings and left half of San Francisco\'s 400,000 residents homeless.' },
+
+  { num:'#6',  title:'The Attacks of the Grizzlies, 1967',  emoji:'🐻', bg:'linear-gradient(160deg,#1a2d1a,#3d5c1a)',
+    summary:'Melody is backpacking in Glacier National Park when something unthinkable happens: grizzly bears attack two separate campsites in one terrifying night. Based on the true "Night of the Grizzlies" that changed how America thinks about wildlife.',
+    fact:'The August 13, 1967 attacks were the first recorded fatal grizzly bear attacks in Glacier\'s history and led to major changes in national park food storage rules.' },
+
+  { num:'#7',  title:'The Battle of Gettysburg, 1863',      emoji:'⚔️', bg:'linear-gradient(160deg,#2d1a00,#6b3d00)',
+    summary:'Thomas is an eleven-year-old boy whose farm sits right on the edge of the bloodiest battle in American history. As Union and Confederate armies clash for three brutal days, Thomas must protect his family and a wounded soldier hiding in their barn.',
+    fact:'The Battle of Gettysburg produced roughly 51,000 casualties over three days in July 1863, making it the deadliest battle of the entire Civil War.' },
+
+  { num:'#8',  title:'The Japanese Tsunami, 2011',          emoji:'🌊', bg:'linear-gradient(160deg,#001a3d,#003d7a)',
+    summary:'Ben\'s family has just arrived in Japan when a massive 9.0-magnitude earthquake strikes offshore, sending a devastating tsunami rushing toward the coast. Ben is separated from his parents and must find safety on his own in an unfamiliar country.',
+    fact:'The 2011 Tōhoku tsunami reached heights of up to 133 feet in some areas and triggered a nuclear disaster at the Fukushima Daiichi power plant.' },
+
+  { num:'#9',  title:'The Nazi Invasion of Norway, 1940',   emoji:'❄️', bg:'linear-gradient(160deg,#1a1a2d,#2d2d5c)',
+    summary:'Eleven-year-old Erik is living in Norway when Nazi Germany invades on a single shocking April night. As his country falls, Erik must help a Jewish family escape across the mountains into Sweden in the dead of winter.',
+    fact:'Despite being vastly outnumbered, Norwegian resistance fighters and civilians helped smuggle over 900 Jews to safety in Sweden during the occupation.' },
+
+  { num:'#10', title:'The Destruction of Pompeii, AD 79',   emoji:'🌋', bg:'linear-gradient(160deg,#3d0a00,#8b1a00)',
+    summary:'Marcus is a young slave in the bustling city of Pompeii when Mount Vesuvius begins to rumble. When the volcano finally erupts with terrifying force, Marcus has only minutes to escape the blinding ash and scorching heat that will bury the city forever.',
+    fact:'Vesuvius\' eruption buried Pompeii under 13–20 feet of ash and pumice, preserving the city — and its victims — in remarkable detail for nearly 2,000 years.' },
+
+  { num:'#11', title:'The Great Chicago Fire, 1871',         emoji:'🔥', bg:'linear-gradient(160deg,#3d1500,#8b3200)',
+    summary:'Oscar Starry has just arrived in Chicago when a small fire in a barn becomes the most catastrophic urban fire in American history. Racing through the burning streets, Oscar must save himself and find his missing little sister before the flames consume everything.',
+    fact:'The Great Chicago Fire burned for two days, destroyed 17,000 buildings, left 100,000 people homeless, and killed an estimated 300 people across 2,000 acres.' },
+
+  { num:'#12', title:'The Hindenburg Disaster, 1937',        emoji:'🎈', bg:'linear-gradient(160deg,#2d2000,#6b4c00)',
+    summary:'Hugo Ballard is on the German airship Hindenburg — the largest flying machine ever built — when the hydrogen-filled giant suddenly bursts into flames above a New Jersey airfield. Hugo has seconds to escape as the entire ship collapses in fire.',
+    fact:'The Hindenburg disaster killed 36 of the 97 people on board and was broadcast live on radio, effectively ending the era of passenger airship travel.' },
+
+  { num:'#13', title:'The Joplin Tornado, 2011',             emoji:'🌪️', bg:'linear-gradient(160deg,#1a0a2d,#3d1a6b)',
+    summary:'Dexter has always been fascinated by tornadoes — until a mile-wide EF5 twister aims straight for his town of Joplin, Missouri. With only minutes of warning, Dexter and his neighbor must shelter in place as the most destructive tornado in modern U.S. history tears through.',
+    fact:'The Joplin tornado killed 161 people and destroyed or damaged 8,000 buildings, making it the deadliest single tornado in the U.S. since 1947.' },
+
+  { num:'#14', title:'The Eruption of Mount St. Helens',     emoji:'⛰️', bg:'linear-gradient(160deg,#2d1a00,#5c3600)',
+    summary:'Jessie is camping near Mount St. Helens in Washington State when the long-dormant volcano erupts with a force 500 times more powerful than an atomic bomb. With ash turning the sky black and a deadly pyroclastic surge racing down the mountain, escape seems impossible.',
+    fact:'The 1980 Mount St. Helens eruption killed 57 people, flattened 230 square miles of forest, and sent ash as far as 11 states away.' },
+
+  { num:'#15', title:'The California Wildfires, 2018',       emoji:'🔥', bg:'linear-gradient(160deg,#3d1a00,#6b3000)',
+    summary:'A devastating wildfire is tearing through Northern California, and eleven-year-old Leo is trapped. The Camp Fire is moving faster than anyone predicted, and Leo must make impossible decisions to survive the deadliest wildfire in California history.',
+    fact:'The 2018 Camp Fire killed 85 people and destroyed nearly 19,000 structures, making it the deadliest and most destructive wildfire in California\'s recorded history.' },
+
+  { num:'#16', title:'The Wellington Avalanche, 1910',        emoji:'🏔️', bg:'linear-gradient(160deg,#1a1a3d,#2d2d6b)',
+    summary:'Two trains are stranded high in the Cascade Mountains of Washington State during a brutal blizzard. When an avalanche thunders down the slope, twelve-year-old Danny must fight for survival in a disaster that no one saw coming.',
+    fact:'The Wellington avalanche buried two trains under 14 feet of snow and killed 96 people, making it the deadliest avalanche in U.S. history.' },
+
+  { num:'#17', title:'The Children\'s Blizzard, 1888',       emoji:'❄️', bg:'linear-gradient(160deg,#0a1a2d,#1a2d4a)',
+    summary:'Eleven-year-old John Hale is inside his one-room schoolhouse on the Great Plains when a terrifying blizzard sweeps in with no warning, dropping temperatures 40 degrees in minutes and turning the world white. Getting home means crossing an open prairie in a whiteout.',
+    fact:'The Children\'s Blizzard of January 12, 1888 killed an estimated 235 people, many of them children who left school and became disoriented in the sudden storm.' },
+
+  { num:'#18', title:'The Battle of D-Day',                  emoji:'🪖', bg:'linear-gradient(160deg,#1a2d1a,#2d4a2d)',
+    summary:'Thirteen-year-old Dan Patterson sneaks aboard a troop transport heading for the beaches of Normandy, France, on June 6, 1944 — D-Day. In the chaos and horror of the largest amphibious assault in history, Dan must find the courage to survive and do what\'s right.',
+    fact:'D-Day involved nearly 160,000 Allied troops crossing the English Channel and over 5,000 ships. It marked the beginning of the end of Nazi Germany\'s occupation of Western Europe.' },
+
+  { num:'#19', title:'The Bombing of Pearl Harbor',          emoji:'✈️', bg:'linear-gradient(160deg,#2d1a0a,#6b3d1a)',
+    summary:'Twelve-year-old Eva is on the island of Oahu, Hawaii, when the Japanese attack transforms a peaceful Sunday morning into a nightmare. Separated from her family and with fires raging across Pearl Harbor, Eva must find safety in a city consumed by war.',
+    fact:'The surprise attack on Pearl Harbor began at 7:48 a.m. on December 7, 1941 and involved 353 Japanese aircraft launched from six aircraft carriers.' },
+
+  { num:'#20', title:'The Titanic\'s Last Hero',             emoji:'⛵', bg:'linear-gradient(160deg,#0a1a2d,#1a3a5c)',
+    summary:'Based on the true story of John Harper, a pastor traveling on the Titanic who gave his life preserver to a woman who needed it. Told through the eyes of a young boy, this book explores the incredible acts of sacrifice and bravery that happened on that terrible night.',
+    fact:'Survivor accounts from the Titanic described extraordinary acts of heroism, including crew members who helped passengers into lifeboats knowing they would not get a spot themselves.' },
+
+  { num:'#21', title:'The Clone Catastrophe',                emoji:'🤖', bg:'linear-gradient(160deg,#001a1a,#003d3d)',
+    summary:'In this science fiction installment, eleven-year-old Otis is horrified to discover that his whole world might not be what it seems — and that the greatest disaster he\'ll ever face might be one that was manufactured by human hands.',
+    fact:'This entry in the series takes the survival theme into the realm of science fiction, exploring questions about identity, technology, and what it means to be human.' },
+
+  { num:'#22', title:'The Tower of London',                  emoji:'🏰', bg:'linear-gradient(160deg,#1a0a00,#3d1a00)',
+    summary:'Twelve-year-old Thomas is transported back to 16th century London, where he becomes entangled in the deadly political web surrounding the Tower of London — a place where prisoners went in but rarely came out. Surviving the past will be harder than anything he\'s faced before.',
+    fact:'The Tower of London housed some of history\'s most famous prisoners, including Anne Boleyn and Sir Walter Raleigh, over its nearly 1,000-year history.' },
+
+  { num:'#23', title:'The Impossible Rescue',                emoji:'🧊', bg:'linear-gradient(160deg,#001a2d,#00304d)',
+    summary:'It\'s 1897 and eight whalers are trapped in the Arctic ice when their ship is crushed. What follows is one of the most daring rescue missions in U.S. history — a 1,500-mile overland trek to bring supplies across frozen Alaska.',
+    fact:'The 1897–98 Overland Relief Expedition sent a team of men 1,500 miles across Alaska to rescue stranded whalers, herding reindeer as a food source the entire way.' },
+
+  { num:'#24', title:'The Galveston Hurricane, 1900',        emoji:'🌩️', bg:'linear-gradient(160deg,#1a1a00,#3d3d00)',
+    summary:'It\'s September 8, 1900, and Jessie Roscow is trapped on the island city of Galveston, Texas, as the deadliest hurricane in American history makes landfall. With a 15-foot storm surge swallowing the island, Jessie must find higher ground — but there is none.',
+    fact:'The Galveston hurricane killed an estimated 6,000–12,000 people and remains the deadliest natural disaster in U.S. history, more than a century later.' },
+
+  { num:'#25', title:'The Battle of the Little Bighorn',    emoji:'🏹', bg:'linear-gradient(160deg,#1a0a00,#4a2000)',
+    summary:'Twelve-year-old Charlie is caught between worlds — part Lakota, part white — when General Custer\'s forces clash with thousands of Sioux and Cheyenne warriors on the banks of the Little Bighorn River in June 1876. Charlie sees the battle from both sides.',
+    fact:'At Little Bighorn, Lt. Col. George Armstrong Custer and all 268 men under his direct command were killed in one of the most famous defeats in U.S. military history.' },
+];
+
+// Build band
+const bandInner = document.getElementById('bandInner');
+const bandContent = books.map(b => `<span class="band-item">${b.emoji} ${b.title}</span>`).join('');
+bandInner.innerHTML = bandContent + bandContent; // duplicate for seamless loop
+
+// Build book grid
+const grid = document.getElementById('booksGrid');
+books.forEach((b, i) => {
+  const card = document.createElement('div');
+  card.className = 'book-card';
+  card.style.transitionDelay = `${i * 40}ms`;
+  card.dataset.index = i;
+  card.innerHTML = `
+    <div class="book-cover" style="background:${b.bg}">
+      <div class="book-emoji">${b.emoji}</div>
+      <div class="book-info">
+        <div class="book-num">${b.num}</div>
+        <div class="book-title">${b.title}</div>
+      </div>
+    </div>
+  `;
+  card.addEventListener('click', () => openModal(i));
+  grid.appendChild(card);
+});
+
+// Modal
+const overlay  = document.getElementById('modalOverlay');
+const mClose   = document.getElementById('modalClose');
+const mEmoji   = document.getElementById('mEmoji');
+const mNum     = document.getElementById('mNum');
+const mTitle   = document.getElementById('mTitle');
+const mSummary = document.getElementById('mSummary');
+const mFact    = document.getElementById('mFact');
+
+function openModal(i) {
+  const b = books[i];
+  mEmoji.textContent   = b.emoji;
+  mNum.textContent     = 'Book ' + b.num;
+  mTitle.textContent   = 'I Survived ' + b.title;
+  mSummary.textContent = b.summary;
+  mFact.textContent    = b.fact;
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+mClose.addEventListener('click', closeModal);
+overlay.addEventListener('click', e => { if(e.target === overlay) closeModal(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+// Particles
+const hero = document.querySelector('.hero');
+const colors = ['#D93025','#F5A623','rgba(242,232,213,0.6)','#1C2F4E'];
+for(let i=0;i<28;i++){
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const size = Math.random()*6+2;
+  p.style.cssText = `width:${size}px;height:${size*(Math.random()*3+1)}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*14+8}s;animation-delay:${Math.random()*12}s;border-radius:${Math.random()>0.5?'50%':'2px'};`;
+  hero.appendChild(p);
+}
+
+// Scroll reveals
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.book-card, .tip-card').forEach(el => observer.observe(el));
+document.querySelectorAll('.tip-card').forEach((el,i) => { el.style.transitionDelay = `${i*80}ms`; });
+</script>
+</body>
+</html>
